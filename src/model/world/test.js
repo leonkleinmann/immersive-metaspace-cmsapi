@@ -5,6 +5,7 @@ import BaseTile from "../BaseTile.js";
 import VirtualWorld from "../VirtualWorld.js";
 import MetaSpace from "../MetaSpace.js";
 import Animation from "../Animation.js";
+import ExitObject from "../ExitObject.js";
 
 export async function buildTest() {
   const floor1 = await Texture.create({
@@ -322,11 +323,26 @@ export async function buildTest() {
     texture: floor1,
   });
 
+  const sustainabilityRoom = await VirtualRoom.create({
+    width: 20,
+    height: 20,
+    base_texture: floor1,
+    initial_position: initialTile,
+  });
+
+  const lobbyExit = await ExitObject.create({
+    x: 2,
+    y: 2,
+    texture: floor1,
+    next_room: sustainabilityRoom
+  })
+
   const lobbyRoom = await VirtualRoom.create({
-    width: 10,
-    height: 30,
+    width: 50,
+    height: 50,
     base_texture: floor2,
     initial_position: initialTile,
+    exits: [lobbyExit]
   });
 
   const virtualWorld = await VirtualWorld.create({
