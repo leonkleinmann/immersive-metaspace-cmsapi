@@ -7,14 +7,15 @@ export default class AvatarState {
     this.avatars.set(id, data);
   }
 
-  updateX(client_id, x) {
+  updatePosition(client_id, x, y) {
     let value = this.avatars.get(client_id)
     value.x = x
+    value.y = y
     this.avatars.set(client_id, value)
   }
-  updateY(client_id, y) {
+  updateDirection(client_id, direction) {
     let value = this.avatars.get(client_id)
-    value.y = y
+    value.direction = direction
     this.avatars.set(client_id, value)
   }
 

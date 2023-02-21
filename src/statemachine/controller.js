@@ -118,23 +118,28 @@ export default class StateMachine extends WebSocketServer {
     );
   }
   handleAvatarStateUpdate(parsedCommand) {
-    this.avatarState.updateX(parsedCommand.clientId, parsedCommand.message.x);
-    this.avatarState.updateY(parsedCommand.clientId, parsedCommand.message.y);
+    // update position
+    this.avatarState.updatePosition(parsedCommand.clientId, parsedCommand.message.x, parsedCommand.message.y)
+    this.avatarState.updateDirection(parsedCommand.clientId, parsedCommand.message.direction)
+
     let changedAvatarState = this.avatarState.getAvatarStateById(
       parsedCommand.clientId
     );
 
-    let roomies = this.avatarState.getAvatarStatesByRoom(
+    // hole alle avatars ausser den anfragenden
+    let roomClients = this.avatarState.getAvatarStatesByRoom(
       changedAvatarState.room_id,
       parsedCommand.clientId
     );
-    roomies.forEach((client) => {
+
+    roomClients.forEach((client) => {
       this.clientRepository.getClientById(client.client_id).socket.send(
         JSON.stringify({
           command: "AVATAR_STATE_UPDATED",
           clientId: parsedCommand.clientId,
           x: changedAvatarState.x,
           y: changedAvatarState.y,
+          direction: changedAvatarState.direction
         })
       );
     });
