@@ -12,6 +12,7 @@ export default class StateMachine extends WebSocketServer {
     this.chatState = new ChatState();
     this.avatarState = new AvatarState();
     this.on("connection", this.handleConnection);
+    this.on("close", this.handleClose);
     console.log("StateMachine: will listen to port " + port);
   }
 
@@ -22,6 +23,9 @@ export default class StateMachine extends WebSocketServer {
     );
   }
 
+  handleClose(client) {
+    console.log("Connection Closed", client);
+  }
   handleIncomingMessage(command, client) {
     const parsedCommand = JSON.parse(command);
     console.log("parsedCommand", parsedCommand);
@@ -34,6 +38,9 @@ export default class StateMachine extends WebSocketServer {
         break;
       case "ROOM_ENTRY":
         this.handleRoomEntry(parsedCommand);
+        break;
+      case "ROOM_LEAVE":
+        this.handleRoomLeave(parsedCommand);
         break;
       case "AVATAR_STATE_UPDATE":
         this.handleAvatarStateUpdate(parsedCommand);
@@ -117,10 +124,33 @@ export default class StateMachine extends WebSocketServer {
       })
     );
   }
+  handleRoomLeave(parsedCommand) {
+    let stateCpy = this.avatarState.getAvatarStateById(parsedCommand.clientId);
+    this.avatarState.removeAvatarState(parsedCommand.clientId);
+
+    let roomClients = this.avatarState.getAvatarStatesByRoom(stateCpy.room_id);
+    roomClients.forEach((avatarState) => {
+      this.clientRepository.getClientById(avatarState.client_id).socket.send(
+        JSON.stringify({
+          command: "ROOM_LEFT",
+          data: {
+            clientId: parsedCommand.clientId,
+          },
+        })
+      );
+    });
+  }
   handleAvatarStateUpdate(parsedCommand) {
     // update position
-    this.avatarState.updatePosition(parsedCommand.clientId, parsedCommand.message.x, parsedCommand.message.y)
-    this.avatarState.updateDirection(parsedCommand.clientId, parsedCommand.message.direction)
+    this.avatarState.updatePosition(
+      parsedCommand.clientId,
+      parsedCommand.message.x,
+      parsedCommand.message.y
+    );
+    this.avatarState.updateDirection(
+      parsedCommand.clientId,
+      parsedCommand.message.direction
+    );
 
     let changedAvatarState = this.avatarState.getAvatarStateById(
       parsedCommand.clientId
@@ -139,7 +169,7 @@ export default class StateMachine extends WebSocketServer {
           clientId: parsedCommand.clientId,
           x: changedAvatarState.x,
           y: changedAvatarState.y,
-          direction: changedAvatarState.direction
+          direction: changedAvatarState.direction,
         })
       );
     });

@@ -7,6 +7,10 @@ export default class AvatarState {
     this.avatars.set(id, data);
   }
 
+  removeAvatarState(client_id) {
+    this.avatars.delete(client_id)
+  }
+
   updatePosition(client_id, x, y) {
     let value = this.avatars.get(client_id)
     value.x = x
