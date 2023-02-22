@@ -8,6 +8,8 @@ import Animation from "../Animation.js";
 import ExitObject from "../ExitObject.js";
 import CommonObject from "../CommonObject.js";
 import AnimatedObject from "../AnimatedObject.js";
+import InteractiveObject from "../InteractiveObject.js";
+import Content from "../Content.js";
 
 export async function buildTest() {
   /* CARPETS */
@@ -467,13 +469,43 @@ export async function buildTest() {
     animation: fridgeAnimation,
   });
 
+  const testContent = await Content.create({
+    html: "<h1>Test-Content</h1>",
+  });
+
+  const testContent2 = await Content.create({
+    html: "<h1>Test-Content 2</h1>",
+  });
+
+  const interactiveObject = await InteractiveObject.create({
+    x: 8,
+    y: 8,
+    animation: fridgeAnimation,
+    content: testContent,
+  });
+
+  const interactiveObject2 = await InteractiveObject.create({
+    x: 10,
+    y: 8,
+    animation: fridgeAnimation,
+    content: testContent2,
+  });
+
   const lobbyRoom = await VirtualRoom.create({
     width: 50,
     height: 50,
     base_texture: floor2,
     initial_position: initialTile,
     exits: [lobbyExit],
-    objects: [commonObject, commonObject2, commonObject4, commonObject4, animatedObject],
+    objects: [
+      commonObject,
+      commonObject2,
+      commonObject4,
+      commonObject4,
+      animatedObject,
+      interactiveObject,
+      interactiveObject2,
+    ],
   });
 
   const virtualWorld = await VirtualWorld.create({

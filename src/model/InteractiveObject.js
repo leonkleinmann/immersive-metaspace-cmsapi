@@ -1,8 +1,13 @@
 import mongoose from "mongoose";
-import MapObject from "./MapObject.js";
 import Content from "./Content.js";
+import MapObject from "./MapObject.js";
+import Animation from "./Animation.js";
 
 const schema = new mongoose.Schema({
+  animation: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: Animation,
+  },
   content: {
     type: mongoose.Schema.Types.ObjectId,
     ref: Content,
