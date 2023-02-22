@@ -6,8 +6,109 @@ import VirtualWorld from "../VirtualWorld.js";
 import MetaSpace from "../MetaSpace.js";
 import Animation from "../Animation.js";
 import ExitObject from "../ExitObject.js";
+import CommonObject from "../CommonObject.js";
+import AnimatedObject from "../AnimatedObject.js";
 
 export async function buildTest() {
+  /* CARPETS */
+  const carpet_purple = await Texture.create({
+    type: "carpet_purple",
+    width: 112,
+    height: 116,
+    x: 0,
+    y: 0,
+  });
+  const carpet_brown = await Texture.create({
+    type: "carpet_brown",
+    width: 84,
+    height: 54,
+    x: 114,
+    y: 0,
+  });
+
+  const carpet_green = await Texture.create({
+    type: "carpet_green",
+    width: 64,
+    height: 55,
+    x: 200,
+    y: 0,
+  });
+
+  const carpet_red = await Texture.create({
+    type: "carpet_red",
+    width: 128,
+    height: 64,
+    x: 113,
+    y: 57,
+  });
+
+  const carpetSprite = await Sprite.create({
+    identifier: "carpets",
+    src: "drawable/object/base/carpets.png",
+    textures: [carpet_purple, carpet_brown, carpet_green, carpet_red],
+  });
+
+  /* FRIDGE */
+  const fridge1 = await Texture.create({
+    type: "fridge_02",
+    width: 32,
+    height: 72,
+    x: 0,
+    y: 14,
+  });
+  const fridge2 = await Texture.create({
+    type: "fridge_02",
+    width: 32,
+    height: 72,
+    x: 64,
+    y: 14,
+  });
+  const fridge3 = await Texture.create({
+    type: "fridge_03",
+    width: 32,
+    height: 72,
+    x: 128,
+    y: 14,
+  });
+  const fridge4 = await Texture.create({
+    type: "fridge_04",
+    width: 32,
+    height: 72,
+    x: 192,
+    y: 14,
+  });
+  const fridge5 = await Texture.create({
+    type: "fridge_05",
+    width: 32,
+    height: 72,
+    x: 256,
+    y: 14,
+  });
+  const fridge6 = await Texture.create({
+    type: "fridge_06",
+    width: 32,
+    height: 72,
+    x: 320,
+    y: 14,
+  });
+  const fridge7 = await Texture.create({
+    type: "fridge_07",
+    width: 32,
+    height: 72,
+    x: 384,
+    y: 14,
+  });
+  const fridgeSprite = await Sprite.create({
+    identifier: "fridge",
+    src: "/drawable/object/animated/fridge.png",
+    textures: [fridge1, fridge2, fridge3, fridge4, fridge5, fridge6, fridge7],
+  });
+  const fridgeAnimation = await Animation.create({
+    identifier: "fridge",
+    textures: [fridge1, fridge2, fridge3, fridge4, fridge5, fridge6, fridge7],
+  });
+
+  /* FLOORS */
   const floor1 = await Texture.create({
     type: "yellow_floor",
     width: 32,
@@ -334,15 +435,45 @@ export async function buildTest() {
     x: 2,
     y: 2,
     texture: floor1,
-    next_room: sustainabilityRoom
-  })
+    next_room: sustainabilityRoom,
+  });
+
+  const commonObject = await CommonObject.create({
+    x: 0,
+    y: 0,
+    texture: carpet_purple,
+  });
+  const commonObject2 = await CommonObject.create({
+    x: 2,
+    y: 2,
+    texture: carpet_brown,
+  });
+
+  const commonObject3 = await CommonObject.create({
+    x: 4,
+    y: 4,
+    texture: carpet_green,
+  });
+
+  const commonObject4 = await CommonObject.create({
+    x: 0,
+    y: 4,
+    texture: carpet_red,
+  });
+
+  const animatedObject = await AnimatedObject.create({
+    x: 6,
+    y: 6,
+    animation: fridgeAnimation,
+  });
 
   const lobbyRoom = await VirtualRoom.create({
     width: 50,
     height: 50,
     base_texture: floor2,
     initial_position: initialTile,
-    exits: [lobbyExit]
+    exits: [lobbyExit],
+    objects: [commonObject, commonObject2, commonObject4, commonObject4, animatedObject],
   });
 
   const virtualWorld = await VirtualWorld.create({

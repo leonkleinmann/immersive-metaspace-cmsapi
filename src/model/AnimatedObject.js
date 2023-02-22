@@ -1,15 +1,13 @@
 import mongoose from "mongoose";
 import MapObject from "./MapObject.js";
-import Texture from "./Texture.js";
+import Animation from "./Animation.js";
 
 const schema = new mongoose.Schema({
-  textures: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: Texture,
-    },
-  ],
+  animation: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: Animation,
+  },
 });
 
-const AnimatedObject = MapObject.discriminator("object_type", schema);
+const AnimatedObject = MapObject.discriminator("animated_object", schema);
 export default AnimatedObject;
