@@ -84,16 +84,20 @@ export default class StateMachine extends WebSocketServer {
       parsedCommand.message.room_id,
       parsedCommand.clientId
     );
+    let callerAvatarState = this.avatarState.getAvatarStateById(parsedCommand.clientId)
+    let callerClient = this.clientRepository.getClientById(parsedCommand.clientId);
+
 
     roomClients.forEach((client) => {
       let socketClient = this.clientRepository.getClientById(client.client_id);
+
       let item = {
         clientId: parsedCommand.clientId,
-        gender: socketClient.gender,
-        username: socketClient.username,
-        link: socketClient.link,
-        x: client.state.x,
-        y: client.state.y,
+        gender: callerClient.gender,
+        username: callerClient.username,
+        link: callerClient.link,
+        x: callerAvatarState.x,
+        y: callerAvatarState.y,
       };
       socketClient.socket.send(
         JSON.stringify({
