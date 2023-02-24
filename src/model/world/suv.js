@@ -30,6 +30,7 @@ export async function buildWorld() {
         y: 2
     })
     const sprite = await Sprite.create({
+        identifier: "test",
         src: "/atlas.png",
         textures: [texture],
     });

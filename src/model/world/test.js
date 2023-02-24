@@ -12,6 +12,21 @@ import InteractiveObject from "../InteractiveObject.js";
 import Content from "../Content.js";
 
 export async function buildTest() {
+  /* UI */
+  const linkTexture = await Texture.create({
+    type: "link",
+    width: 800,
+    height: 800,
+    x: 0,
+    y: 0,
+  });
+
+  const uiSprite = await Sprite.create({
+    identifier: "ui",
+    src: "drawable/ui/base/link.png",
+    textures: [linkTexture],
+  });
+
   /* CARPETS */
   const carpet_purple = await Texture.create({
     type: "carpet_purple",
@@ -46,9 +61,25 @@ export async function buildTest() {
 
   const carpetSprite = await Sprite.create({
     identifier: "carpets",
-    src: "drawable/object/base/carpets.png",
+    src: "drawable/tiles/base/carpets.png",
     textures: [carpet_purple, carpet_brown, carpet_green, carpet_red],
   });
+
+  /* COUCH */
+  const couchTexture = await Texture.create({
+    type: "carpet_red",
+    width: 96,
+    height: 96,
+    x: 0,
+    y: 0,
+  });
+  const couchSprite = await Sprite.create({
+    identifier: "couch",
+    src: "/drawable/object/base/couches.png",
+    textures: [couchTexture],
+  });
+
+
 
   /* FRIDGE */
   const fridge1 = await Texture.create({
@@ -477,6 +508,13 @@ export async function buildTest() {
     html: "<h1>Test-Content 2</h1>",
   });
 
+  const baseTile1 = await BaseTile.create({
+    type: "carpet",
+    x: 0,
+    y: 0,
+    texture: carpet_purple,
+  });
+
   const interactiveObject = await InteractiveObject.create({
     x: 8,
     y: 8,
@@ -485,27 +523,33 @@ export async function buildTest() {
   });
 
   const interactiveObject2 = await InteractiveObject.create({
-    x: 10,
+    x: 2,
     y: 8,
     animation: fridgeAnimation,
     content: testContent2,
   });
 
+  const interactiveObject3 = await InteractiveObject.create({
+    x: 8,
+    y: 1,
+    animation: fridgeAnimation,
+    content: testContent2,
+  });
+
+  const commonCouchObject = await CommonObject.create({
+    x: 2,
+    y: 14,
+    texture: couchTexture,
+  });
+
   const lobbyRoom = await VirtualRoom.create({
-    width: 50,
-    height: 50,
+    width: 10,
+    height: 20,
     base_texture: floor2,
     initial_position: initialTile,
+    tiles: [baseTile1],
     exits: [lobbyExit],
-    objects: [
-      commonObject,
-      commonObject2,
-      commonObject4,
-      commonObject4,
-      animatedObject,
-      interactiveObject,
-      interactiveObject2,
-    ],
+    objects: [interactiveObject3, commonCouchObject],
   });
 
   const virtualWorld = await VirtualWorld.create({
