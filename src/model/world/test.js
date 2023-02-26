@@ -24,6 +24,32 @@ export async function buildTest() {
     x: 0,
     y: 0,
   });
+  const actionButtonTexture1 = await Texture.create({
+    type: "action_01",
+    width: 20,
+    height: 20,
+    x: 0,
+    y: 0,
+  });
+
+  const actionButtonTexture2 = await Texture.create({
+    type: "action_02",
+    width: 20,
+    height: 20,
+    x: 20,
+    y: 0,
+  });
+
+  const actionSprite = await Sprite.create({
+    identifier: "action",
+    src: "drawable/ui/animated/action.png",
+    textures: [actionButtonTexture1, actionButtonTexture2],
+  });
+
+  const actionAnimation = await Animation.create({
+    identifier: "action",
+    textures: [actionButtonTexture1, actionButtonTexture2],
+  });
 
   const uiSprite = await Sprite.create({
     identifier: "ui",
@@ -85,62 +111,55 @@ export async function buildTest() {
 
   /* FRIDGE */
   const fridge1 = await Texture.create({
-    type: "fridge_02",
+    type: "fridge_01",
     width: 32,
-    height: 72,
+    height: 64,
     x: 0,
-    y: 14,
+    y: 0,
   });
   const fridge2 = await Texture.create({
     type: "fridge_02",
     width: 32,
-    height: 72,
-    x: 64,
-    y: 14,
+    height: 64,
+    x: 32,
+    y: 0,
   });
   const fridge3 = await Texture.create({
     type: "fridge_03",
     width: 32,
-    height: 72,
-    x: 128,
-    y: 14,
+    height: 64,
+    x: 96,
+    y: 0,
   });
   const fridge4 = await Texture.create({
     type: "fridge_04",
     width: 32,
-    height: 72,
-    x: 192,
-    y: 14,
+    height: 64,
+    x: 128,
+    y: 0,
   });
   const fridge5 = await Texture.create({
     type: "fridge_05",
     width: 32,
-    height: 72,
-    x: 256,
-    y: 14,
+    height: 64,
+    x: 160,
+    y: 0,
   });
   const fridge6 = await Texture.create({
     type: "fridge_06",
     width: 32,
-    height: 72,
-    x: 320,
-    y: 14,
-  });
-  const fridge7 = await Texture.create({
-    type: "fridge_07",
-    width: 32,
-    height: 72,
-    x: 384,
-    y: 14,
+    height: 64,
+    x: 192,
+    y: 0,
   });
   const fridgeSprite = await Sprite.create({
     identifier: "fridge",
-    src: "/drawable/object/animated/fridge.png",
-    textures: [fridge1, fridge2, fridge3, fridge4, fridge5, fridge6, fridge7],
+    src: "/drawable/object/animated/fridge2.png",
+    textures: [fridge1, fridge2, fridge3, fridge4, fridge5, fridge6],
   });
   const fridgeAnimation = await Animation.create({
     identifier: "fridge",
-    textures: [fridge1, fridge2, fridge3, fridge4, fridge5, fridge6, fridge7],
+    textures: [fridge1, fridge2, fridge3, fridge4, fridge5, fridge6],
   });
 
   /* FLOORS */
@@ -558,7 +577,6 @@ export async function buildTest() {
     with_user: false,
   });
 
-
   const contentCommand = await ContentCommand.create({
     type: "content",
     content: testContent2,
@@ -573,12 +591,12 @@ export async function buildTest() {
     x: 6,
     y: 6,
     animation_identifier: "male",
-    chain: commandChain
+    chain: commandChain,
   });
 
   const lobbyRoom = await VirtualRoom.create({
-    width: 10,
-    height: 20,
+    width: 12,
+    height: 40,
     base_texture: floor2,
     initial_position: initialTile,
     music: "/assets/music/lobby.mp3",
