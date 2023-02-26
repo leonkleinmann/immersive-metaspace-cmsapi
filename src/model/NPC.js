@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import Texture from "./Texture.js";
-import Command from "./Command.js";
+import CommandChain from "./CommandChain.js";
 
 const schema = new mongoose.Schema({
   name: {
@@ -15,18 +14,14 @@ const schema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  textures: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: Texture,
-    },
-  ],
-  chain: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: Command,
-    },
-  ],
+  animation_identifier: {
+    type: String,
+    required: true,
+  },
+  chain: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: CommandChain
+  },
 });
 
 const NPC = mongoose.model("NPC", schema, "npcs");

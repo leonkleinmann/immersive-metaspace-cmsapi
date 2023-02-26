@@ -10,6 +10,10 @@ import CommonObject from "../CommonObject.js";
 import AnimatedObject from "../AnimatedObject.js";
 import InteractiveObject from "../InteractiveObject.js";
 import Content from "../Content.js";
+import NPC from "../NPC.js";
+import GotoCommand from "../GotoCommand.js";
+import ContentCommand from "../ContentCommand.js";
+import CommandChain from "../CommandChain.js";
 
 export async function buildTest() {
   /* UI */
@@ -78,8 +82,6 @@ export async function buildTest() {
     src: "/drawable/object/base/couches.png",
     textures: [couchTexture],
   });
-
-
 
   /* FRIDGE */
   const fridge1 = await Texture.create({
@@ -460,6 +462,7 @@ export async function buildTest() {
   const sustainabilityRoom = await VirtualRoom.create({
     width: 20,
     height: 20,
+    music: "/assets/music/sustainability.mp3",
     base_texture: floor1,
     initial_position: initialTile,
   });
@@ -542,14 +545,47 @@ export async function buildTest() {
     texture: couchTexture,
   });
 
+  const gotoCommand = await GotoCommand.create({
+    type: "goto",
+    x: 0,
+    y: 0,
+    with_user: false,
+  });
+  const gotoCommand2 = await GotoCommand.create({
+    type: "goto",
+    x: 0,
+    y: 5,
+    with_user: false,
+  });
+
+
+  const contentCommand = await ContentCommand.create({
+    type: "content",
+    content: testContent2,
+  });
+
+  const commandChain = await CommandChain.create({
+    commands: [gotoCommand, contentCommand, gotoCommand2, contentCommand],
+  });
+
+  const npc = await NPC.create({
+    name: "LEON",
+    x: 6,
+    y: 6,
+    animation_identifier: "male",
+    chain: commandChain
+  });
+
   const lobbyRoom = await VirtualRoom.create({
     width: 10,
     height: 20,
     base_texture: floor2,
     initial_position: initialTile,
+    music: "/assets/music/lobby.mp3",
     tiles: [baseTile1],
     exits: [lobbyExit],
     objects: [interactiveObject3, commonCouchObject],
+    npcs: [npc],
   });
 
   const virtualWorld = await VirtualWorld.create({

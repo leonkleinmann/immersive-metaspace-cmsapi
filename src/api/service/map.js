@@ -52,15 +52,17 @@ export default class MapService {
           path: "npcs",
           populate: [
             {
-              path: "textures",
-            },
-            {
               path: "chain",
               populate: [
                 {
-                  path: "content",
-                },
-              ],
+                  path: "commands",
+                  populate: [
+                    {
+                      path: "content"
+                    }
+                  ]
+                }
+              ]
             },
           ],
         },

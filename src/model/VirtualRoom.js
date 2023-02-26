@@ -14,6 +14,10 @@ const schema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  music: {
+    type: String,
+    required: true
+  },
   base_texture: {
     type: mongoose.Schema.Types.ObjectId,
     ref: Texture,
