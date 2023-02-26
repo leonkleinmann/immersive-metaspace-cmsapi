@@ -98,6 +98,7 @@ export default class StateMachine extends WebSocketServer {
         link: callerClient.link,
         x: callerAvatarState.x,
         y: callerAvatarState.y,
+        ip: callerClient.socket._socket.remoteAddress
       };
       socketClient.socket.send(
         JSON.stringify({
@@ -110,7 +111,6 @@ export default class StateMachine extends WebSocketServer {
     let items = [];
     roomClients.forEach((client) => {
       let socketClient = this.clientRepository.getClientById(client.client_id);
-
       let item = {
         clientId: client.client_id,
         gender: socketClient.gender,
@@ -118,6 +118,7 @@ export default class StateMachine extends WebSocketServer {
         link: socketClient.link,
         x: client.state.x,
         y: client.state.y,
+        ip: socketClient.socket._socket.remoteAddress
       };
       items.push(item);
     });
