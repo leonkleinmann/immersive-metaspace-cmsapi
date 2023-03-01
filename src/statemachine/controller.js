@@ -28,7 +28,7 @@ export default class StateMachine extends WebSocketServer {
   }
   handleIncomingMessage(command, client) {
     const parsedCommand = JSON.parse(command);
-    console.log("parsedCommand", parsedCommand);
+    //console.log("parsedCommand", parsedCommand);
     switch (parsedCommand.command) {
       case "REGISTER":
         this.handleRegister(parsedCommand, client);
@@ -44,6 +44,9 @@ export default class StateMachine extends WebSocketServer {
         break;
       case "AVATAR_STATE_UPDATE":
         this.handleAvatarStateUpdate(parsedCommand);
+        break;
+      case "VIDEO_CHUNK":
+        this.handleVideoChunk(parsedCommand);
         break;
     }
   }
@@ -84,9 +87,12 @@ export default class StateMachine extends WebSocketServer {
       parsedCommand.message.room_id,
       parsedCommand.clientId
     );
-    let callerAvatarState = this.avatarState.getAvatarStateById(parsedCommand.clientId)
-    let callerClient = this.clientRepository.getClientById(parsedCommand.clientId);
-
+    let callerAvatarState = this.avatarState.getAvatarStateById(
+      parsedCommand.clientId
+    );
+    let callerClient = this.clientRepository.getClientById(
+      parsedCommand.clientId
+    );
 
     roomClients.forEach((client) => {
       let socketClient = this.clientRepository.getClientById(client.client_id);
@@ -98,7 +104,7 @@ export default class StateMachine extends WebSocketServer {
         link: callerClient.link,
         x: callerAvatarState.x,
         y: callerAvatarState.y,
-        ip: callerClient.socket._socket.remoteAddress
+        ip: callerClient.socket._socket.remoteAddress,
       };
       socketClient.socket.send(
         JSON.stringify({
@@ -118,7 +124,7 @@ export default class StateMachine extends WebSocketServer {
         link: socketClient.link,
         x: client.state.x,
         y: client.state.y,
-        ip: socketClient.socket._socket.remoteAddress
+        ip: socketClient.socket._socket.remoteAddress,
       };
       items.push(item);
     });
@@ -175,6 +181,18 @@ export default class StateMachine extends WebSocketServer {
           x: changedAvatarState.x,
           y: changedAvatarState.y,
           direction: changedAvatarState.direction,
+        })
+      );
+    });
+  }
+  handleVideoChunk(parsedCommand) {
+    const toClients = parsedCommand.message.toClients;
+    toClients.forEach((clientId) => {
+      this.clientRepository.getClientById(clientId).socket.send(
+        JSON.stringify({
+          command: "VIDEO_CHUNK",
+          clientId: parsedCommand.clientId,
+          chunk: parsedCommand.message.chunk,
         })
       );
     });
