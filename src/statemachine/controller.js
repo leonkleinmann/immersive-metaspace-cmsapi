@@ -1,4 +1,4 @@
-import { WebSocketServer } from "ws";
+import { WebSocket, WebSocketServer } from "ws";
 import ClientRepository from "./repository.js";
 import ChatState from "./state/chat.js";
 import AvatarState from "./state/avatar.js";
@@ -12,42 +12,71 @@ export default class StateMachine extends WebSocketServer {
     this.chatState = new ChatState();
     this.avatarState = new AvatarState();
     this.on("connection", this.handleConnection);
-    this.on("close", this.handleClose);
     console.log("StateMachine: will listen to port " + port);
   }
 
   handleConnection(client) {
     console.log("Client connected to me! :-)");
+    client.on("close", () => {
+      // delete from repository
+      let removedId = this.clientRepository.removeBySocket(client);
+      // notify corresponding clients
+      let state = this.avatarState.getAvatarStateById(removedId);
+      let roomId = state.room_id;
+      let roomClients = this.avatarState.getAvatarStatesByRoom(
+        roomId,
+        removedId
+      );
+      this.avatarState.removeAvatarState(removedId);
+      roomClients.forEach((client) => {
+        let socketClient = this.clientRepository.getClientById(
+          client.client_id
+        ).socket;
+
+        socketClient.send(
+          JSON.stringify({
+            command: "ROOM_LEFT",
+            data: {
+              clientId: removedId,
+            },
+          })
+        );
+      });
+    });
     client.on("message", (command) =>
       this.handleIncomingMessage(command, client)
     );
   }
 
-  handleClose(client) {
-    console.log("Connection Closed", client);
-  }
   handleIncomingMessage(command, client) {
-    const parsedCommand = JSON.parse(command);
-    //console.log("parsedCommand", parsedCommand);
-    switch (parsedCommand.command) {
-      case "REGISTER":
-        this.handleRegister(parsedCommand, client);
-        break;
-      case "CHAT_MSG":
-        this.handleChatMsg(parsedCommand);
-        break;
-      case "ROOM_ENTRY":
-        this.handleRoomEntry(parsedCommand);
-        break;
-      case "ROOM_LEAVE":
-        this.handleRoomLeave(parsedCommand);
-        break;
-      case "AVATAR_STATE_UPDATE":
-        this.handleAvatarStateUpdate(parsedCommand);
-        break;
-      case "VIDEO_CHUNK":
-        this.handleVideoChunk(parsedCommand);
-        break;
+    if (client.readyState === WebSocket.OPEN) {
+      const parsedCommand = JSON.parse(command);
+      //console.log("parsedCommand", parsedCommand);
+      switch (parsedCommand.command) {
+        case "REGISTER":
+          this.handleRegister(parsedCommand, client);
+          break;
+        case "CHAT_MSG":
+          this.handleChatMsg(parsedCommand);
+          break;
+        case "ROOM_ENTRY":
+          this.handleRoomEntry(parsedCommand);
+          break;
+        case "ROOM_LEAVE":
+          this.handleRoomLeave(parsedCommand);
+          break;
+        case "AVATAR_STATE_UPDATE":
+          this.handleAvatarStateUpdate(parsedCommand);
+          break;
+        case "VIDEO_CHUNK":
+          this.handleVideoChunk(parsedCommand);
+          break;
+        default:
+          console.log("Unknown Message", parsedCommand);
+          break;
+      }
+    } else {
+      console.log("Connection lost");
     }
   }
 

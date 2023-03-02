@@ -11,7 +11,7 @@ export default class ClientRepository {
       socket: socket,
       gender: clientData.gender,
       username: clientData.username,
-      link: clientData.link
+      link: clientData.link,
     };
 
     this.clients.set(clientId, client);
@@ -25,6 +25,19 @@ export default class ClientRepository {
   }
 
   getClientById(id) {
-    return this.clients.get(id)
+    return this.clients.get(id);
+  }
+
+  removeBySocket(socket) {
+    let removeId = undefined;
+
+    for (const [key, value] of this.clients) {
+      if (value.socket === socket) {
+        removeId = key;
+        this.clients.delete(key);
+      }
+    }
+
+    return removeId;
   }
 }
