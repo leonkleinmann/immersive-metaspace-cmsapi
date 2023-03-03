@@ -17,6 +17,7 @@ import CommandChain from "../CommandChain.js";
 import AnimatedTile from "../AnimatedTile.js";
 import ContentRoom from "../ContentRoom.js";
 import WorkshopRoom from "../WorkshopRoom.js";
+import InteractiveWorkshopObject from "../InteractiveWorkshopObject.js";
 
 export async function buildTest() {
   /* UI */
@@ -27,6 +28,28 @@ export async function buildTest() {
     x: 0,
     y: 0,
   });
+
+  const uiSprite = await Sprite.create({
+    identifier: "ui",
+    src: "drawable/ui/base/link.png",
+    textures: [linkTexture],
+  });
+
+  /* DESK */
+  const deskTexture = await Texture.create({
+    type: "desk",
+    width: 78,
+    height: 76,
+    x: 0,
+    y: 0,
+  });
+  const deskSprite = await Sprite.create({
+    identifier: "desk",
+    src: "/drawable/object/base/desk.png",
+    textures: [deskTexture],
+  });
+
+  /* ACTION */
   const actionButtonTexture1 = await Texture.create({
     type: "action_01",
     width: 20,
@@ -52,12 +75,6 @@ export async function buildTest() {
   const actionAnimation = await Animation.create({
     identifier: "action",
     textures: [actionButtonTexture1, actionButtonTexture2],
-  });
-
-  const uiSprite = await Sprite.create({
-    identifier: "ui",
-    src: "drawable/ui/base/link.png",
-    textures: [linkTexture],
   });
 
   /* CARPETS */
@@ -481,19 +498,27 @@ export async function buildTest() {
     texture: floor1,
   });
 
-  const sustainabilityRoom = await WorkshopRoom.create({
+  const interactiveWorkshopObject = await InteractiveWorkshopObject.create({
+    x: 10,
+    y: 0,
+    texture: deskTexture,
+  });
+
+  const workshopRoom = await WorkshopRoom.create({
+    max_players: 2,
     width: 20,
     height: 20,
     music: "/assets/music/sustainability.mp3",
     base_texture: floor1,
     initial_position: initialTile,
+    workshopObjects: [interactiveWorkshopObject],
   });
 
   const lobbyExit = await ExitObject.create({
     x: 2,
     y: 2,
     texture: floor1,
-    next_room: sustainabilityRoom,
+    next_room: workshopRoom,
   });
 
   const commonObject = await CommonObject.create({
@@ -617,7 +642,6 @@ export async function buildTest() {
   });
 
   const virtualWorld = await VirtualWorld.create({
-    max_players: 10,
     tile_size: 32,
     initial_room: lobbyRoom,
   });

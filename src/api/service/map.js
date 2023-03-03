@@ -38,6 +38,14 @@ export default class MapService {
           ],
         },
         {
+          path: "workshopObjects",
+          populate: [
+            {
+              path: "texture"
+            }
+          ]
+        },
+        {
           path: "tiles",
           populate: [
             {

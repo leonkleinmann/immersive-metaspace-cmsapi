@@ -71,6 +71,9 @@ export default class StateMachine extends WebSocketServer {
         case "VIDEO_CHUNK":
           this.handleVideoChunk(parsedCommand);
           break;
+        case "SCREEN_CHUNK":
+          this.handleScreenChunk(parsedCommand);
+          break;
         default:
           console.log("Unknown Message", parsedCommand);
           break;
@@ -222,6 +225,30 @@ export default class StateMachine extends WebSocketServer {
           command: "VIDEO_CHUNK",
           clientId: parsedCommand.clientId,
           chunk: parsedCommand.message.chunk,
+        })
+      );
+    });
+  }
+  handleScreenChunk(parsedCommand) {
+    // chunk an andere weiterleiten
+    const senderId = parsedCommand.clientId;
+    const chunk = parsedCommand.message.chunk;
+    const objectId = parsedCommand.message.objectId;
+    console.log(objectId);
+    const roomId = this.avatarState.getAvatarStateById(senderId).room_id;
+    const roomClients = this.avatarState.getAvatarStatesByRoom(
+      roomId,
+      senderId
+    );
+    roomClients.forEach((roomClient) => {
+      const socket = this.clientRepository.getClientById(
+        roomClient.client_id
+      ).socket;
+      socket.send(
+        JSON.stringify({
+          command: "SCREEN_CHUNK",
+          objectId: objectId,
+          chunk: chunk,
         })
       );
     });
