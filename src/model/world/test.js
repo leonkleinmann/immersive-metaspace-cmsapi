@@ -15,6 +15,8 @@ import GotoCommand from "../GotoCommand.js";
 import ContentCommand from "../ContentCommand.js";
 import CommandChain from "../CommandChain.js";
 import AnimatedTile from "../AnimatedTile.js";
+import ContentRoom from "../ContentRoom.js";
+import WorkshopRoom from "../WorkshopRoom.js";
 
 export async function buildTest() {
   /* UI */
@@ -479,7 +481,7 @@ export async function buildTest() {
     texture: floor1,
   });
 
-  const sustainabilityRoom = await VirtualRoom.create({
+  const sustainabilityRoom = await WorkshopRoom.create({
     width: 20,
     height: 20,
     music: "/assets/music/sustainability.mp3",
@@ -602,7 +604,7 @@ export async function buildTest() {
     chain: commandChain,
   });
 
-  const lobbyRoom = await VirtualRoom.create({
+  const lobbyRoom = await ContentRoom.create({
     width: 12,
     height: 40,
     base_texture: floor2,
