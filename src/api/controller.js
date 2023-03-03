@@ -2,8 +2,6 @@ import express from "express";
 import AssetService from "./service/asset.js";
 import SettingsService from "./service/settings.js";
 import MapService from "./service/map.js";
-import TextureModel from "../model/Texture.js";
-import Texture from "../model/Texture.js";
 
 const api = express();
 

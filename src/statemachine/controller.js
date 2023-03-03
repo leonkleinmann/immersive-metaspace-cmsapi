@@ -234,7 +234,6 @@ export default class StateMachine extends WebSocketServer {
     const senderId = parsedCommand.clientId;
     const chunk = parsedCommand.message.chunk;
     const objectId = parsedCommand.message.objectId;
-    console.log(objectId);
     const roomId = this.avatarState.getAvatarStateById(senderId).room_id;
     const roomClients = this.avatarState.getAvatarStatesByRoom(
       roomId,
