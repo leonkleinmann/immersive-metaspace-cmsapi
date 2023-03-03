@@ -44,7 +44,7 @@ export default class MapService {
               path: "texture",
             },
             {
-              path: "textures",
+              path: "animation",
             },
           ],
         },

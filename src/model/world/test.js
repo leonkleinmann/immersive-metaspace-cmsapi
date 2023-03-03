@@ -14,6 +14,7 @@ import NPC from "../NPC.js";
 import GotoCommand from "../GotoCommand.js";
 import ContentCommand from "../ContentCommand.js";
 import CommandChain from "../CommandChain.js";
+import AnimatedTile from "../AnimatedTile.js";
 
 export async function buildTest() {
   /* UI */
@@ -537,6 +538,13 @@ export async function buildTest() {
     texture: carpet_purple,
   });
 
+  const animatedTile = await AnimatedTile.create({
+    type: "fridge",
+    x: 0,
+    y: 4,
+    animation: fridgeAnimation,
+  });
+
   const interactiveObject = await InteractiveObject.create({
     x: 8,
     y: 8,
@@ -600,7 +608,7 @@ export async function buildTest() {
     base_texture: floor2,
     initial_position: initialTile,
     music: "/assets/music/lobby.mp3",
-    tiles: [baseTile1],
+    tiles: [baseTile1, animatedTile],
     exits: [lobbyExit],
     objects: [interactiveObject3, commonCouchObject],
     npcs: [npc],
