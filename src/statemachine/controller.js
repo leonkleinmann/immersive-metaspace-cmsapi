@@ -3,7 +3,14 @@ import ClientRepository from "./repository.js";
 import ChatState from "./state/chat.js";
 import AvatarState from "./state/avatar.js";
 
+/**
+ * Class which represents the StateMachine of the Server which provides a WebSocketServer
+ */
 export default class StateMachine extends WebSocketServer {
+  /**
+   * Constructor of the WebsocketServer
+   * @param port port state machine should listen to (default: 8888)
+   */
   constructor(port = 8888) {
     super({
       port: port,
@@ -11,16 +18,20 @@ export default class StateMachine extends WebSocketServer {
     this.clientRepository = new ClientRepository();
     this.chatState = new ChatState();
     this.avatarState = new AvatarState();
+
     this.on("connection", this.handleConnection);
+
     console.log("StateMachine: will listen to port " + port);
   }
 
+  /**
+   * function which handles a connected client
+   * @param client socket of client
+   */
   handleConnection(client) {
-    console.log("Client connected to me! :-)");
+    // handle closure of connection
     client.on("close", () => {
-      // delete from repository
       let removedId = this.clientRepository.removeBySocket(client);
-      // notify corresponding clients
       let state = this.avatarState.getAvatarStateById(removedId);
       let roomId = state.room_id;
       let roomClients = this.avatarState.getAvatarStatesByRoom(
@@ -28,7 +39,8 @@ export default class StateMachine extends WebSocketServer {
         removedId
       );
       this.avatarState.removeAvatarState(removedId);
-      roomClients.forEach((client) => {
+
+      for (let client of roomClients) {
         let socketClient = this.clientRepository.getClientById(
           client.client_id
         ).socket;
@@ -41,13 +53,19 @@ export default class StateMachine extends WebSocketServer {
             },
           })
         );
-      });
+      }
     });
+
     client.on("message", (command) =>
       this.handleIncomingMessage(command, client)
     );
   }
 
+  /**
+   * function which handles incoming messages
+   * @param command received command
+   * @param client socket instance of the client
+   */
   handleIncomingMessage(command, client) {
     if (client.readyState === WebSocket.OPEN) {
       const parsedCommand = JSON.parse(command);
@@ -83,7 +101,13 @@ export default class StateMachine extends WebSocketServer {
     }
   }
 
+  /**
+   * function which handles register
+   * @param parsedCommand parsed command
+   * @param client socket
+   */
   handleRegister(parsedCommand, client) {
+    // register client and send him generated client id
     this.clientRepository
       .registerClient(client, parsedCommand.message)
       .then((clientId) => {
@@ -95,7 +119,13 @@ export default class StateMachine extends WebSocketServer {
         );
       });
   }
+
+  /**
+   * function which handles incoming chat message
+   * @param parsedCommand parsed command containing command, author and chat message
+   */
   handleChatMsg(parsedCommand) {
+    // add chat message to state and notify other clients
     this.chatState
       .addMessage(parsedCommand.author, parsedCommand.message)
       .then(() => {
@@ -110,11 +140,18 @@ export default class StateMachine extends WebSocketServer {
         }
       });
   }
+
+  /**
+   * function which handles room entry command from client
+   * @param parsedCommand parsed command containing command, clientid and entered room
+   */
   handleRoomEntry(parsedCommand) {
+    // set new avatar room
     this.avatarState.modifyAvatarState(
       parsedCommand.clientId,
       parsedCommand.message
     );
+    // get other clients in new roo
     const roomClients = this.avatarState.getAvatarStatesByRoom(
       parsedCommand.message.room_id,
       parsedCommand.clientId
@@ -126,6 +163,7 @@ export default class StateMachine extends WebSocketServer {
       parsedCommand.clientId
     );
 
+    // nofify sender about successfull room enter and hand him a list of clients in this room
     roomClients.forEach((client) => {
       let socketClient = this.clientRepository.getClientById(client.client_id);
 
@@ -146,6 +184,7 @@ export default class StateMachine extends WebSocketServer {
       );
     });
 
+    // nofify other clients in room that command sender entered the room
     let items = [];
     roomClients.forEach((client) => {
       let socketClient = this.clientRepository.getClientById(client.client_id);
@@ -167,10 +206,17 @@ export default class StateMachine extends WebSocketServer {
       })
     );
   }
+
+  /**
+   * function which handles room leave of client
+   * @param parsedCommand parsed command containing command, client id and room id to leave
+   */
   handleRoomLeave(parsedCommand) {
+    // remove avatar state since he is in no room currently
     let stateCpy = this.avatarState.getAvatarStateById(parsedCommand.clientId);
     this.avatarState.removeAvatarState(parsedCommand.clientId);
 
+    // notify other clients that client left room
     let roomClients = this.avatarState.getAvatarStatesByRoom(stateCpy.room_id);
     roomClients.forEach((avatarState) => {
       this.clientRepository.getClientById(avatarState.client_id).socket.send(
@@ -183,6 +229,11 @@ export default class StateMachine extends WebSocketServer {
       );
     });
   }
+
+  /**
+   * function which handles avatar state update (position)
+   * @param parsedCommand parsed command containing new position
+   */
   handleAvatarStateUpdate(parsedCommand) {
     // update position
     this.avatarState.updatePosition(
@@ -199,12 +250,13 @@ export default class StateMachine extends WebSocketServer {
       parsedCommand.clientId
     );
 
-    // hole alle avatars ausser den anfragenden
+    // get all clients except calling client
     let roomClients = this.avatarState.getAvatarStatesByRoom(
       changedAvatarState.room_id,
       parsedCommand.clientId
     );
 
+    // notify other clients avatar position was updated
     roomClients.forEach((client) => {
       this.clientRepository.getClientById(client.client_id).socket.send(
         JSON.stringify({
@@ -217,7 +269,13 @@ export default class StateMachine extends WebSocketServer {
       );
     });
   }
+
+  /**
+   * function which handles video chunks and delegates them to aim client
+   * @param parsedCommand command containing a (big) chunk and aim client ids
+   */
   handleVideoChunk(parsedCommand) {
+    // just delegate to other clients
     const toClients = parsedCommand.message.toClients;
     toClients.forEach((clientId) => {
       this.clientRepository.getClientById(clientId).socket.send(
@@ -229,8 +287,13 @@ export default class StateMachine extends WebSocketServer {
       );
     });
   }
+
+  /**
+   * function which delegates screen chunks to aim object
+   * @param parsedCommand parsed command containing chunk and delegates it to client
+   */
   handleScreenChunk(parsedCommand) {
-    // chunk an andere weiterleiten
+    // delegate chunk to other clients
     const senderId = parsedCommand.clientId;
     const chunk = parsedCommand.message.chunk;
     const objectId = parsedCommand.message.objectId;

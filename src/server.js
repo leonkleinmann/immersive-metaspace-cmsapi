@@ -3,8 +3,10 @@ import API from "./api/controller.js";
 import StateMachine from "./statemachine/controller.js";
 import {buildTest} from "./model/world/test.js";
 
+/** DB HOST **/
 const uri = "mongodb://localhost/test";
 
+/* get database instance and connect to db, start API and StateMAchine afterwards */
 const database = Database.getInstance();
 database
   .connect(uri, {

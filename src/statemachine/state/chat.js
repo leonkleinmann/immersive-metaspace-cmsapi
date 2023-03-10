@@ -1,9 +1,21 @@
+/**
+ * Class which represents the state of the chat
+ */
 export default class ChatState {
+  /**
+   * Constructor of ChatState
+   */
   constructor() {
     this.messages = [];
   }
 
-  async addMessage(author, message) {
+  /**
+   * function which adds message to test
+   * @param author author of the chat message
+   * @param message message of the author
+   * @returns chatArray promise user can wait for
+   */
+  addMessage(author, message) {
     this.messages.push({
       author: author,
       message: message,
