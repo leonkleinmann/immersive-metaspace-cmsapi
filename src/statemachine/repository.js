@@ -34,6 +34,14 @@ export default class ClientRepository {
   }
 
   /**
+   * function which returns all clients
+   * @returns {IterableIterator<unknown>} all clients in the meta space
+   */
+  getAllClients() {
+    return this.clients.values();
+  }
+
+  /**
    * function which gets a client by id
    * @param id id of the client
    * @returns {unknown} client object

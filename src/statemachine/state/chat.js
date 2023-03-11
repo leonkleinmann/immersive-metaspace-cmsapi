@@ -15,7 +15,7 @@ export default class ChatState {
    * @param message message of the author
    * @returns chatArray promise user can wait for
    */
-  addMessage(author, message) {
+  async addMessage(author, message) {
     this.messages.push({
       author: author,
       message: message,
