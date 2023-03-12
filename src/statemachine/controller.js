@@ -278,13 +278,17 @@ export default class StateMachine extends WebSocketServer {
     // just delegate to other clients
     const toClients = parsedCommand.message.toClients;
     toClients.forEach((clientId) => {
-      this.clientRepository.getClientById(clientId).socket.send(
-        JSON.stringify({
-          command: "VIDEO_CHUNK",
-          clientId: parsedCommand.clientId,
-          chunk: parsedCommand.message.chunk,
-        })
-      );
+      try {
+        this.clientRepository.getClientById(clientId).socket.send(
+            JSON.stringify({
+              command: "VIDEO_CHUNK",
+              clientId: parsedCommand.clientId,
+              chunk: parsedCommand.message.chunk,
+            })
+        );
+      } catch {
+        console.log('Socket not available')
+      }
     });
   }
 
