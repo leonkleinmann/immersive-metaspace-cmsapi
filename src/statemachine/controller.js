@@ -83,10 +83,10 @@ export default class StateMachine extends WebSocketServer {
         case "ROOM_LEAVE":
           this.handleRoomLeave(parsedCommand);
           break;
-        case "AVATAR_STATE_UPDATE":
+        case "AVATAR_POS_UPDATE":
           this.handleAvatarStateUpdate(parsedCommand);
           break;
-        case "VIDEO_CHUNK":
+        case "VIDEO_CHUNK_SEND":
           this.handleVideoChunk(parsedCommand);
           break;
         case "SCREEN_CHUNK":
@@ -260,7 +260,7 @@ export default class StateMachine extends WebSocketServer {
     roomClients.forEach((client) => {
       this.clientRepository.getClientById(client.client_id).socket.send(
         JSON.stringify({
-          command: "AVATAR_STATE_UPDATED",
+          command: "AVATAR_POS_UPDATED",
           clientId: parsedCommand.clientId,
           x: changedAvatarState.x,
           y: changedAvatarState.y,
@@ -281,7 +281,7 @@ export default class StateMachine extends WebSocketServer {
       try {
         this.clientRepository.getClientById(clientId).socket.send(
             JSON.stringify({
-              command: "VIDEO_CHUNK",
+              command: "VIDEO_CHUNK_RECEIVED",
               clientId: parsedCommand.clientId,
               chunk: parsedCommand.message.chunk,
             })

@@ -491,6 +491,302 @@ export async function buildTest() {
     ],
   });
 
+
+  /** IDLE **/
+  const femaleIdleEast = await Texture.create({
+    type: "female_idle_east",
+    width: 32,
+    height: 64,
+    x: 0,
+    y: 0,
+  });
+  const femaleIdleNorth = await Texture.create({
+    type: "female_idle_north",
+    width: 32,
+    height: 64,
+    x: 32,
+    y: 0,
+  });
+  const femaleIdleWest = await Texture.create({
+    type: "female_idle_west",
+    width: 32,
+    height: 64,
+    x: 64,
+    y: 0,
+  });
+  const femaleIdleSouth = await Texture.create({
+    type: "female_idle_south",
+    width: 32,
+    height: 64,
+    x: 96,
+    y: 0,
+  });
+
+  const femaleIdleSprite = await Sprite.create({
+    identifier: "female_idle",
+    src: "drawable/avatar/female/idle.png",
+    textures: [femaleIdleNorth, femaleIdleEast, femaleIdleSouth, femaleIdleWest],
+  });
+
+  /** NORTH **/
+  const femaleWalkNorth1 = await Texture.create({
+    type: "female_walk_north_0",
+    width: 32,
+    height: 64,
+    x: 6 * 32,
+    y: 0,
+  });
+  const femaleWalkNorth2 = await Texture.create({
+    type: "female_walk_north_1",
+    width: 32,
+    height: 64,
+    x: 7 * 32,
+    y: 0,
+  });
+  const femaleWalkNorth3 = await Texture.create({
+    type: "female_walk_north_2",
+    width: 32,
+    height: 64,
+    x: 8 * 32,
+    y: 0,
+  });
+  const femaleWalkNorth4 = await Texture.create({
+    type: "female_walk_north_3",
+    width: 32,
+    height: 64,
+    x: 9 * 32,
+    y: 0,
+  });
+  const femaleWalkNorth5 = await Texture.create({
+    type: "female_walk_north_4",
+    width: 32,
+    height: 64,
+    x: 10 * 32,
+    y: 0,
+  });
+  const femaleWalkNorth6 = await Texture.create({
+    type: "female_walk_north_5",
+    width: 32,
+    height: 64,
+    x: 11 * 32,
+    y: 0,
+  });
+
+  const femaleWalkNorthAnimation = await Animation.create({
+    identifier: "female_walk_north",
+    textures: [
+      femaleWalkNorth1,
+      femaleWalkNorth2,
+      femaleWalkNorth3,
+      femaleWalkNorth4,
+      femaleWalkNorth5,
+      femaleWalkNorth6,
+    ],
+  });
+
+  /** EAST **/
+  const femaleWalkEast1 = await Texture.create({
+    type: "female_walk_east_0",
+    width: 32,
+    height: 64,
+    x: 0 * 32,
+    y: 0,
+  });
+  const femaleWalkEast2 = await Texture.create({
+    type: "female_walk_east_1",
+    width: 32,
+    height: 64,
+    x: 1 * 32,
+    y: 0,
+  });
+  const femaleWalkEast3 = await Texture.create({
+    type: "female_walk_east_2",
+    width: 32,
+    height: 64,
+    x: 2 * 32,
+    y: 0,
+  });
+  const femaleWalkEast4 = await Texture.create({
+    type: "female_walk_east_3",
+    width: 32,
+    height: 64,
+    x: 3 * 32,
+    y: 0,
+  });
+  const femaleWalkEast5 = await Texture.create({
+    type: "female_walk_east_4",
+    width: 32,
+    height: 64,
+    x: 4 * 32,
+    y: 0,
+  });
+  const femaleWalkEast6 = await Texture.create({
+    type: "female_walk_east_5",
+    width: 32,
+    height: 64,
+    x: 5 * 32,
+    y: 0,
+  });
+  const femaleWalkEastAnimation = await Animation.create({
+    identifier: "female_walk_east",
+    textures: [
+      femaleWalkEast1,
+      femaleWalkEast2,
+      femaleWalkEast3,
+      femaleWalkEast4,
+      femaleWalkEast5,
+      femaleWalkEast6,
+    ],
+  });
+
+  /** SOUTH **/
+  const femaleWalkSouth1 = await Texture.create({
+    type: "female_walk_south_0",
+    width: 32,
+    height: 64,
+    x: 18 * 32,
+    y: 0,
+  });
+  const femaleWalkSouth2 = await Texture.create({
+    type: "female_walk_south_1",
+    width: 32,
+    height: 64,
+    x: 19 * 32,
+    y: 0,
+  });
+  const femaleWalkSouth3 = await Texture.create({
+    type: "female_walk_south_2",
+    width: 32,
+    height: 64,
+    x: 20 * 32,
+    y: 0,
+  });
+  const femaleWalkSouth4 = await Texture.create({
+    type: "female_walk_south_3",
+    width: 32,
+    height: 64,
+    x: 21 * 32,
+    y: 0,
+  });
+  const femaleWalkSouth5 = await Texture.create({
+    type: "female_walk_south_4",
+    width: 32,
+    height: 64,
+    x: 22 * 32,
+    y: 0,
+  });
+  const femaleWalkSouth6 = await Texture.create({
+    type: "female_walk_south_5",
+    width: 32,
+    height: 64,
+    x: 23 * 32,
+    y: 0,
+  });
+  const femaleWalkSouthAnimation = await Animation.create({
+    identifier: "female_walk_south",
+    textures: [
+      femaleWalkSouth1,
+      femaleWalkSouth2,
+      femaleWalkSouth3,
+      femaleWalkSouth4,
+      femaleWalkSouth5,
+      femaleWalkSouth6,
+    ],
+  });
+
+  /** WEST **/
+  const femaleWalkWest1 = await Texture.create({
+    type: "female_walk_west_0",
+    width: 32,
+    height: 64,
+    x: 12 * 32,
+    y: 0,
+  });
+  const femaleWalkWest2 = await Texture.create({
+    type: "female_walk_west_1",
+    width: 32,
+    height: 64,
+    x: 13 * 32,
+    y: 0,
+  });
+  const femaleWalkWest3 = await Texture.create({
+    type: "female_walk_west_2",
+    width: 32,
+    height: 64,
+    x: 14 * 32,
+    y: 0,
+  });
+  const femaleWalkWest4 = await Texture.create({
+    type: "female_walk_west_3",
+    width: 32,
+    height: 64,
+    x: 15 * 32,
+    y: 0,
+  });
+  const femaleWalkWest5 = await Texture.create({
+    type: "female_walk_west_4",
+    width: 32,
+    height: 64,
+    x: 16 * 32,
+    y: 0,
+  });
+  const femaleWalkWest6 = await Texture.create({
+    type: "female_walk_west_6",
+    width: 32,
+    height: 64,
+    x: 17 * 32,
+    y: 0,
+  });
+  const femaleWalkWestAnimation = await Animation.create({
+    identifier: "female_walk_west",
+    textures: [
+      femaleWalkWest1,
+      femaleWalkWest2,
+      femaleWalkWest3,
+      femaleWalkWest4,
+      femaleWalkWest5,
+      femaleWalkWest6,
+    ],
+  });
+
+  const femaleWalkSprite = await Sprite.create({
+    identifier: "female_walk",
+    src: "drawable/avatar/female/walk.png",
+    textures: [
+      femaleWalkNorth1,
+      femaleWalkNorth2,
+      femaleWalkNorth3,
+      femaleWalkNorth4,
+      femaleWalkNorth5,
+      femaleWalkNorth6,
+      femaleWalkEast1,
+      femaleWalkEast2,
+      femaleWalkEast3,
+      femaleWalkEast4,
+      femaleWalkEast5,
+      femaleWalkEast6,
+      femaleWalkSouth1,
+      femaleWalkSouth2,
+      femaleWalkSouth3,
+      femaleWalkSouth4,
+      femaleWalkSouth5,
+      femaleWalkSouth6,
+      femaleWalkWest1,
+      femaleWalkWest2,
+      femaleWalkWest3,
+      femaleWalkWest4,
+      femaleWalkWest5,
+      femaleWalkWest6,
+    ],
+  });
+
+
+  /**
+   *
+   * @type {Document<unknown, any, unknown> & unknown extends {_id?: infer U} ? IfAny<U, {_id: Types.ObjectId}, Required<{_id: U}>> : {_id: Types.ObjectId}}
+   */
+
+
   const initialTile = await BaseTile.create({
     type: "grass",
     x: 5,
