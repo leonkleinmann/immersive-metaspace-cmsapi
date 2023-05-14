@@ -1,208 +1,13 @@
-import Texture from "../Texture.js";
-import Sprite from "../Sprite.js";
-import VirtualRoom from "../VirtualRoom.js";
-import BaseTile from "../BaseTile.js";
 import VirtualWorld from "../VirtualWorld.js";
 import MetaSpace from "../MetaSpace.js";
+import Texture from "../Texture.js";
+import Sprite from "../Sprite.js";
 import Animation from "../Animation.js";
-import ExitObject from "../ExitObject.js";
-import CommonObject from "../CommonObject.js";
-import AnimatedObject from "../AnimatedObject.js";
-import InteractiveObject from "../InteractiveObject.js";
-import Content from "../Content.js";
-import NPC from "../NPC.js";
-import GotoCommand from "../GotoCommand.js";
-import ContentCommand from "../ContentCommand.js";
-import CommandChain from "../CommandChain.js";
-import AnimatedTile from "../AnimatedTile.js";
 import ContentRoom from "../ContentRoom.js";
-import WorkshopRoom from "../WorkshopRoom.js";
-import InteractiveWorkshopObject from "../InteractiveWorkshopObject.js";
+import BaseTile from "../BaseTile.js";
+import CommonObject from "../CommonObject.js";
 
-export async function buildTest() {
-  /* UI */
-  const linkTexture = await Texture.create({
-    type: "link",
-    width: 800,
-    height: 800,
-    x: 0,
-    y: 0,
-  });
-
-  const uiSprite = await Sprite.create({
-    identifier: "ui",
-    src: "drawable/ui/base/link.png",
-    textures: [linkTexture],
-  });
-
-  /* DESK */
-  const deskTexture = await Texture.create({
-    type: "desk",
-    width: 78,
-    height: 76,
-    x: 0,
-    y: 0,
-  });
-  const deskSprite = await Sprite.create({
-    identifier: "desk",
-    src: "/drawable/object/base/desk.png",
-    textures: [deskTexture],
-  });
-
-  /* ACTION */
-  const actionButtonTexture1 = await Texture.create({
-    type: "action_01",
-    width: 20,
-    height: 20,
-    x: 0,
-    y: 0,
-  });
-
-  const actionButtonTexture2 = await Texture.create({
-    type: "action_02",
-    width: 20,
-    height: 20,
-    x: 20,
-    y: 0,
-  });
-
-  const actionSprite = await Sprite.create({
-    identifier: "action",
-    src: "drawable/ui/animated/action.png",
-    textures: [actionButtonTexture1, actionButtonTexture2],
-  });
-
-  const actionAnimation = await Animation.create({
-    identifier: "action",
-    textures: [actionButtonTexture1, actionButtonTexture2],
-  });
-
-  /* CARPETS */
-  const carpet_purple = await Texture.create({
-    type: "carpet_purple",
-    width: 112,
-    height: 116,
-    x: 0,
-    y: 0,
-  });
-  const carpet_brown = await Texture.create({
-    type: "carpet_brown",
-    width: 84,
-    height: 54,
-    x: 114,
-    y: 0,
-  });
-
-  const carpet_green = await Texture.create({
-    type: "carpet_green",
-    width: 64,
-    height: 55,
-    x: 200,
-    y: 0,
-  });
-
-  const carpet_red = await Texture.create({
-    type: "carpet_red",
-    width: 128,
-    height: 64,
-    x: 113,
-    y: 57,
-  });
-
-  const carpetSprite = await Sprite.create({
-    identifier: "carpets",
-    src: "drawable/tiles/base/carpets.png",
-    textures: [carpet_purple, carpet_brown, carpet_green, carpet_red],
-  });
-
-  /* COUCH */
-  const couchTexture = await Texture.create({
-    type: "carpet_red",
-    width: 96,
-    height: 96,
-    x: 0,
-    y: 0,
-  });
-  const couchSprite = await Sprite.create({
-    identifier: "couch",
-    src: "/drawable/object/base/couches.png",
-    textures: [couchTexture],
-  });
-
-  /* FRIDGE */
-  const fridge1 = await Texture.create({
-    type: "fridge_01",
-    width: 32,
-    height: 64,
-    x: 0,
-    y: 0,
-  });
-  const fridge2 = await Texture.create({
-    type: "fridge_02",
-    width: 32,
-    height: 64,
-    x: 32,
-    y: 0,
-  });
-  const fridge3 = await Texture.create({
-    type: "fridge_03",
-    width: 32,
-    height: 64,
-    x: 96,
-    y: 0,
-  });
-  const fridge4 = await Texture.create({
-    type: "fridge_04",
-    width: 32,
-    height: 64,
-    x: 128,
-    y: 0,
-  });
-  const fridge5 = await Texture.create({
-    type: "fridge_05",
-    width: 32,
-    height: 64,
-    x: 160,
-    y: 0,
-  });
-  const fridge6 = await Texture.create({
-    type: "fridge_06",
-    width: 32,
-    height: 64,
-    x: 192,
-    y: 0,
-  });
-  const fridgeSprite = await Sprite.create({
-    identifier: "fridge",
-    src: "/drawable/object/animated/fridge2.png",
-    textures: [fridge1, fridge2, fridge3, fridge4, fridge5, fridge6],
-  });
-  const fridgeAnimation = await Animation.create({
-    identifier: "fridge",
-    textures: [fridge1, fridge2, fridge3, fridge4, fridge5, fridge6],
-  });
-
-  /* FLOORS */
-  const floor1 = await Texture.create({
-    type: "yellow_floor",
-    width: 32,
-    height: 32,
-    x: 0,
-    y: 0,
-  });
-  const floor2 = await Texture.create({
-    type: "graete_floor",
-    width: 32,
-    height: 32,
-    x: 32,
-    y: 256,
-  });
-  const floorSprite = await Sprite.create({
-    identifier: "floors",
-    src: "/drawable/tiles/base/floors.png",
-    textures: [floor1, floor2],
-  });
-
+async function buildAvatarAssets() {
   /** IDLE **/
   const maleIdleEast = await Texture.create({
     type: "male_idle_east",
@@ -491,7 +296,6 @@ export async function buildTest() {
     ],
   });
 
-
   /** IDLE **/
   const femaleIdleEast = await Texture.create({
     type: "female_idle_east",
@@ -525,7 +329,12 @@ export async function buildTest() {
   const femaleIdleSprite = await Sprite.create({
     identifier: "female_idle",
     src: "drawable/avatar/female/idle.png",
-    textures: [femaleIdleNorth, femaleIdleEast, femaleIdleSouth, femaleIdleWest],
+    textures: [
+      femaleIdleNorth,
+      femaleIdleEast,
+      femaleIdleSouth,
+      femaleIdleWest,
+    ],
   });
 
   /** NORTH **/
@@ -779,162 +588,201 @@ export async function buildTest() {
       femaleWalkWest6,
     ],
   });
+}
+async function buildTextures() {
+  let textures = {}
 
-
-  /**
-   *
-   * @type {Document<unknown, any, unknown> & unknown extends {_id?: infer U} ? IfAny<U, {_id: Types.ObjectId}, Required<{_id: U}>> : {_id: Types.ObjectId}}
-   */
-
-
-  const initialTile = await BaseTile.create({
+  /** FLOORS **/
+  const stone = await Texture.create({
+    type: "stone",
+    width: 32,
+    height: 32,
+    x: 0,
+    y: 0,
+  });
+  const grass = await Texture.create({
     type: "grass",
-    x: 5,
-    y: 5,
-    texture: floor1,
+    width: 32,
+    height: 32,
+    x: 32,
+    y: 0,
+  });
+  const wood = await Texture.create({
+    type: "wood",
+    width: 64,
+    height: 32,
+    x: 64,
+    y: 0,
+  });
+  const building = await Texture.create({
+    type: "building",
+    width: 500,
+    height: 272,
+    x: 0,
+    y: 0,
+  })
+  const tree = await Texture.create({
+    type: "tree",
+    width: 158,
+    height: 180,
+    x: 0,
+    y: 320,
   });
 
-  const interactiveWorkshopObject = await InteractiveWorkshopObject.create({
+  textures["stone"] = stone;
+  textures["grass"] = grass;
+  textures["wood"] = wood
+  textures["building"] = building;
+  textures["tree"] = tree;
+  return textures
+}
+async function buildSprites(textures) {
+  await Sprite.create({
+    identifier: "floors",
+    src: "/drawable/tiles/base/floors.png",
+    textures: [textures["stone"], textures["grass"], textures["wood"]]
+  });
+
+  await Sprite.create({
+    identifier: "lobby_objects",
+    src: "/drawable/object/base/lobbyObjects.png",
+    textures: [textures["building"], textures["tree"]]
+  });
+}
+async function buildTiles(textures) {
+  let tiles = {}
+  tiles["initial_lobby"] = await BaseTile.create({
+    type: "grass",
+    x: 0,
+    y: 0,
+    texture: textures["grass"],
+  });
+  tiles["steg_1"] = await BaseTile.create({
+    type: "wood",
+    x: 18,
+    y: 14,
+    texture: textures["wood"]
+  });
+  tiles["steg_2"] = await BaseTile.create({
+    type: "wood",
+    x: 18,
+    y: 15,
+    texture: textures["wood"]
+  });
+  tiles["steg_3"] = await BaseTile.create({
+    type: "wood",
+    x: 18,
+    y: 16,
+    texture: textures["wood"]
+  });
+  tiles["steg_4"] = await BaseTile.create({
+    type: "wood",
+    x: 18,
+    y: 17,
+    texture: textures["wood"]
+  });
+
+
+  return tiles
+}
+async function buildAnimatedTiles(textures) {
+
+}
+async function buildCommonObjects(textures) {
+  let commonObjects = {}
+
+  const buildingObject = await CommonObject.create({
     x: 10,
     y: 0,
-    texture: deskTexture,
-  });
+    texture: textures["building"],
+  })
 
-  const workshopRoom = await WorkshopRoom.create({
-    max_players: 2,
-    width: 20,
-    height: 20,
-    music: "/assets/music/sustainability.mp3",
-    base_texture: floor1,
-    initial_position: initialTile,
-    workshopObjects: [interactiveWorkshopObject],
-  });
-
-  const lobbyExit = await ExitObject.create({
-    x: 2,
-    y: 2,
-    texture: floor1,
-    next_room: workshopRoom,
-  });
-
-  const commonObject = await CommonObject.create({
-    x: 0,
-    y: 0,
-    texture: carpet_purple,
-  });
-  const commonObject2 = await CommonObject.create({
-    x: 2,
-    y: 2,
-    texture: carpet_brown,
-  });
-
-  const commonObject3 = await CommonObject.create({
-    x: 4,
-    y: 4,
-    texture: carpet_green,
-  });
-
-  const commonObject4 = await CommonObject.create({
-    x: 0,
-    y: 4,
-    texture: carpet_red,
-  });
-
-  const animatedObject = await AnimatedObject.create({
-    x: 6,
-    y: 6,
-    animation: fridgeAnimation,
-  });
-
-  const testContent = await Content.create({
-    html: "<h1>Test-Content</h1>",
-  });
-
-  const testContent2 = await Content.create({
-    html: "<h1>Test-Content 2</h1>",
-  });
-
-  const baseTile1 = await BaseTile.create({
-    type: "carpet",
-    x: 0,
-    y: 0,
-    texture: carpet_purple,
-  });
-
-  const animatedTile = await AnimatedTile.create({
-    type: "fridge",
-    x: 0,
-    y: 4,
-    animation: fridgeAnimation,
-  });
-
-  const interactiveObject = await InteractiveObject.create({
-    x: 8,
-    y: 8,
-    animation: fridgeAnimation,
-    content: testContent,
-  });
-
-  const interactiveObject2 = await InteractiveObject.create({
-    x: 2,
-    y: 8,
-    animation: fridgeAnimation,
-    content: testContent2,
-  });
-
-  const interactiveObject3 = await InteractiveObject.create({
-    x: 8,
-    y: 1,
-    animation: fridgeAnimation,
-    content: testContent2,
-  });
-
-  const commonCouchObject = await CommonObject.create({
-    x: 2,
+  const treeObject = await CommonObject.create({
+    x: 26,
     y: 14,
-    texture: couchTexture,
+    texture: textures["tree"],
   });
 
-  const gotoCommand = await GotoCommand.create({
-    type: "goto",
-    x: 0,
-    y: 0,
-    with_user: false,
-  });
-  const gotoCommand2 = await GotoCommand.create({
-    type: "goto",
-    x: 0,
-    y: 5,
-    with_user: false,
-  });
+  commonObjects["buildingObject"] = buildingObject
+  commonObjects["treeObject"] = treeObject
+  return commonObjects
+}
+async function buildFrame(tile_type, tile_object) {
+  let frameTiles = [];
 
-  const contentCommand = await ContentCommand.create({
-    type: "content",
-    content: testContent2,
-  });
+  for (let x = 0; x < 5; x++) {
+    for (let y = 0; y < 50; y++) {
+      const frameTile = await BaseTile.create({
+        type: tile_type,
+        x: x,
+        y: y,
+        texture: tile_object,
+      });
+      frameTiles.push(frameTile);
+    }
+  }
 
-  const commandChain = await CommandChain.create({
-    commands: [gotoCommand, contentCommand, gotoCommand2, contentCommand],
-  });
+  for (let x = 0; x < 35; x++) {
+    for (let y = 0; y < 15; y++) {
+      const frameTile = await BaseTile.create({
+        type: tile_type,
+        x: x,
+        y: y,
+        texture: tile_object,
+      });
+      frameTiles.push(frameTile);
+    }
+  }
 
-  const npc = await NPC.create({
-    name: "LEON",
-    x: 6,
-    y: 6,
-    animation_identifier: "male",
-    chain: commandChain,
-  });
+  for (let x = 30; x < 35; x++) {
+    for (let y = 0; y < 55; y++) {
+      const frameTile = await BaseTile.create({
+        type: tile_type,
+        x: x,
+        y: y,
+        texture: tile_object,
+      });
+      frameTiles.push(frameTile);
+    }
+  }
 
+  for (let x = 0; x < 35; x++) {
+    for (let y = 50; y < 55; y++) {
+      const frameTile = await BaseTile.create({
+        type: tile_type,
+        x: x,
+        y: y,
+        texture: tile_object,
+      });
+      frameTiles.push(frameTile);
+    }
+  }
+
+  return frameTiles;
+}
+
+export async function buildDemo() {
+  await buildAvatarAssets();
+  let textures = await buildTextures();
+  await buildSprites(textures);
+  let frameTiles = await buildFrame("stone", textures["stone"]);
+  let tiles = await buildTiles(textures);
+  let commonObjects = await buildCommonObjects(textures);
+
+  frameTiles.push(tiles["steg_1"])
+  frameTiles.push(tiles["steg_2"])
+  frameTiles.push(tiles["steg_3"])
+  frameTiles.push(tiles["steg_4"])
   const lobbyRoom = await ContentRoom.create({
-    width: 30,
-    height: 50,
-    base_texture: floor2,
-    initial_position: initialTile,
+    width: 35,
+    height: 55,
+    base_texture: textures["grass"],
+    initial_position: tiles["initial_lobby"],
     music: "/assets/music/lobby.mp3",
-    tiles: [baseTile1, animatedTile],
-    exits: [lobbyExit],
-    objects: [interactiveObject3, commonCouchObject],
-    npcs: [npc],
+    tiles: frameTiles,
+    exits: [],
+    objects: [commonObjects["buildingObject"], commonObjects["treeObject"]],
+    npcs: [],
   });
 
   const virtualWorld = await VirtualWorld.create({
